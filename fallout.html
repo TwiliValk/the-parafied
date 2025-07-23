@@ -124,6 +124,30 @@
     audio {
       display: none;
     }
+
+    .mute-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  color: black;
+  border: 4px solid black;
+  font-family: 'Bangers', cursive;
+  font-size: 1rem;
+  padding: 0.6rem 1.2rem;
+  transform: skew(-5deg);
+  box-shadow: 4px 4px 0 black;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  z-index: 1000;
+}
+
+.mute-button:hover {
+  background: black;
+  color: white;
+  box-shadow: 6px 6px 0 white;
+}
+
   </style>
 </head>
 <body>
@@ -153,6 +177,9 @@
 
   </div>
 
+  <button id="mute-btn" class="mute-button">Unmute Music</button>
+
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.add('page-opening');
@@ -171,6 +198,19 @@
 
     const whoosh = document.getElementById('whoosh-sound');
     const bgMusic = document.getElementById('bg-music');
+
+    const muteBtn = document.getElementById('mute-btn');
+let isMuted = true;
+
+bgMusic.volume = 0.4;
+bgMusic.muted = true; // Start muted
+
+muteBtn.addEventListener('click', () => {
+  isMuted = !isMuted;
+  bgMusic.muted = isMuted;
+  muteBtn.textContent = isMuted ? 'Unmute Music' : 'Mute Music';
+});
+
 
     bgMusic.volume = 0.4;
 
