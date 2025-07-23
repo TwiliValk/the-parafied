@@ -151,6 +151,32 @@
       0% { opacity: 1; transform: scale(1); }
       100% { opacity: 0; transform: scale(1.2); }
     }
+
+    .music-btn {
+  position: fixed;
+  bottom: 1rem;   /* moved from top to bottom */
+  right: 1rem;
+  background: white;
+  color: black;
+  border: 4px solid black;
+  font-family: 'Bangers', cursive;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  z-index: 1000;
+  transform: skew(-5deg);
+  box-shadow: 4px 4px 0 black;
+  transition: all 0.25s ease;
+}
+
+.music-btn:hover {
+  background: black;
+  color: white;
+  transform: scale(1.05) skew(-5deg);
+  box-shadow: 6px 6px 0 white;
+}
+
+
   </style>
 </head>
 <body>
@@ -171,6 +197,8 @@
   <audio id="type-sound" src="audio/typewriter-key.mp3" preload="auto"></audio>
   <audio id="hover-sound" src="audio/whoosh.mp3" preload="auto"></audio>
   <audio id="bg-music" src="audio/home.mp3" preload="auto" loop></audio>
+
+  <button id="music-toggle" class="music-btn">Unmute Music</button>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -332,6 +360,26 @@
 
       document.addEventListener('click', startMusic);
     });
+
+    const bgMusic = document.getElementById('bg-music');
+  const musicToggle = document.getElementById('music-toggle');
+  let musicPlaying = false;
+
+  musicToggle.addEventListener('click', () => {
+    if (!musicPlaying) {
+      bgMusic.volume = 0.4;
+      bgMusic.play().then(() => {
+        musicPlaying = true;
+        musicToggle.textContent = 'Mute Music';
+      }).catch((e) => {
+        console.error('Music play failed:', e);
+      });
+    } else {
+      bgMusic.pause();
+      musicPlaying = false;
+      musicToggle.textContent = 'Unmute Music';
+    }
+  });
   </script>
 </body>
 </html>
