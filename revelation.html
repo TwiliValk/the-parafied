@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Revelation | The Parafied</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+  <style>
+    @keyframes simplePageOpen {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    body.page-opening {
+      animation: simplePageOpen 0.5s ease-out;
+    }
+
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Bangers', cursive;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem;
+      font-size: 3rem;
+      letter-spacing: 0.1em;
+      text-shadow: 2px 2px white;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-bar button {
+      background: white;
+      color: black;
+      border: 4px solid black;
+      font-family: 'Bangers', cursive;
+      font-size: 1.3rem;
+      padding: 0.7rem 1.4rem;
+      margin: 0.3rem;
+      cursor: pointer;
+      transform: skew(-5deg);
+      box-shadow: 4px 4px 0 black;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .nav-bar button:hover {
+      background: black;
+      color: white;
+      transform: scale(1.05) skew(-5deg);
+      box-shadow: 6px 6px 0 white;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .character-card {
+      background: white;
+      color: black;
+      border: 4px solid black;
+      box-shadow: 8px 8px 0 white;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.2s ease;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .character-card:hover {
+      transform: scale(1.05);
+      box-shadow: 10px 10px 0 white;
+    }
+
+    .character-card img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border: 3px solid black;
+      margin-bottom: 1rem;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+
+    .character-name {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .character-power {
+      font-size: 1rem;
+      font-style: italic;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 1rem;
+      opacity: 0.5;
+    }
+
+    body.fade-out {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background music -->
+  <audio id="bg-music" autoplay loop>
+    <source src="audio/revelation.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Whoosh SFX -->
+  <audio id="whoosh-sound">
+    <source src="audio/whoosh.mp3" type="audio/mpeg">
+  </audio>
+
+  <header>Revelation</header>
+
+  <div class="nav-bar">
+    <button class="nav-btn" onclick="navigateTo('index.html')">Home</button>
+    <button class="nav-btn" onclick="navigateTo('misfits.html')">Misfits</button>
+    <button class="nav-btn" onclick="navigateTo('fallout.html')">Fallout</button>
+    <button class="nav-btn" onclick="navigateTo('revelation.html')">Revelation</button>
+  </div>
+
+  <div class="grid">
+    
+    
+
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('page-opening');
+    });
+
+    function navigateTo(url) {
+      document.body.classList.add('fade-out');
+      setTimeout(() => {
+        window.location.href = url;
+      }, 300);
+    }
+
+    window.addEventListener('pageshow', () => {
+      document.body.classList.remove('fade-out');
+    });
+
+    const whoosh = document.getElementById('whoosh-sound');
+    const bgMusic = document.getElementById('bg-music');
+
+    bgMusic.volume = 0.4;
+
+    document.querySelectorAll('.nav-btn, .character-card').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        if (!whoosh.paused) {
+          whoosh.currentTime = 0;
+        }
+        whoosh.play().catch(() => {});
+      });
+    });
+
+    function startAudioOnInteraction() {
+      bgMusic.play().catch(() => {});
+      document.removeEventListener('click', startAudioOnInteraction);
+    }
+
+    document.addEventListener('click', startAudioOnInteraction);
+
+    // Hover image swap
+    document.querySelectorAll('.character-card').forEach(card => {
+      const img = card.querySelector('img');
+      const originalSrc = img.getAttribute('src');
+      const extIndex = originalSrc.lastIndexOf('.');
+      const hoverSrc = originalSrc.slice(0, extIndex) + '_c' + originalSrc.slice(extIndex);
+
+      img.style.transition = 'opacity 0.3s ease';
+
+      card.addEventListener('mouseenter', () => {
+        img.style.opacity = '0';
+        setTimeout(() => {
+          img.src = hoverSrc;
+          img.style.opacity = '1';
+        }, 150);
+      });
+
+      card.addEventListener('mouseleave', () => {
+        img.style.opacity = '0';
+        setTimeout(() => {
+          img.src = originalSrc;
+          img.style.opacity = '1';
+        }, 150);
+      });
+    });
+  </script>
+
+</body>
+</html>
